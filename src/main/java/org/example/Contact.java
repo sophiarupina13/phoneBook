@@ -1,17 +1,38 @@
 package org.example;
 
+import java.util.Objects;
+
 public class Contact {
 
+    private final long id;
     private String name;
     private String surname;
     private String phoneNumber;
     private String email;
 
-    public Contact(String name, String surname, String phoneNumber, String email) {
+    public Contact(long id, String name, String surname, String phoneNumber, String email) {
+        this.id = id;
         this.name = name;
         this.surname = surname;
         this.phoneNumber = phoneNumber;
         this.email = email;
+    }
+
+    public Contact(long id, String name, String phoneNumber, String email) {
+        this.id = id;
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+    }
+
+    public Contact(long id, String name, String phoneNumber) {
+        this.id = id;
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+    }
+
+    public long getId() {
+        return id;
     }
 
     public String getName() {
@@ -44,5 +65,33 @@ public class Contact {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    @Override
+    public String toString() {
+        return "Contact{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", email='" + email + '\'' +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Contact contact = (Contact) o;
+        return id == contact.id &&
+                Objects.equals(name, contact.name) &&
+                Objects.equals(surname, contact.surname) &&
+                Objects.equals(phoneNumber, contact.phoneNumber) &&
+                Objects.equals(email, contact.email);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, surname, phoneNumber, email);
     }
 }
