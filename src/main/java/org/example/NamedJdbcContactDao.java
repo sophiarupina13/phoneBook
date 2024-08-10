@@ -53,6 +53,24 @@ public class NamedJdbcContactDao implements ContactsDao {
     }
 
     @Override
+    public void addContacts(List<Contact> contacts) {
+
+        var args = contacts.stream()
+                        .map(account -> new MapSqlParameterSource()
+                                .addValue("name", account.getName())
+                                .addValue("surname", account.getSurname())
+                                .addValue("phone_number", account.getPhoneNumber())
+                                .addValue("email", account.getEmail()))
+                        .toArray(MapSqlParameterSource[]::new);
+
+
+        namedParameterJdbcTemplate.batchUpdate(
+                CREATE_CONTACT_SQL,
+                args
+        );
+    }
+
+    @Override
     public Contact addContact(String name, String surname, String phoneNumber, String email) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
 

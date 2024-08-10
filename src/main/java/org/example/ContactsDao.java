@@ -5,6 +5,7 @@ import java.util.Optional;
 
 public interface ContactsDao {
 
+    void addContacts(List<Contact> contacts);
     Contact addContact(String name, String surname, String phoneNumber, String email);
     Contact addContact(String name, String phoneNumber, String email);
     Contact addContact(String name, String phoneNumber);
