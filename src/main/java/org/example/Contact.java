@@ -1,32 +1,48 @@
 package org.example;
 
+import javax.persistence.*;
 import java.util.Objects;
 
+@Entity
+@Table(name="contact")
 public class Contact {
 
-    private final long id;
+    @Id
+    @GeneratedValue(strategy= GenerationType.SEQUENCE)
+    @Column(name = "id")
+    private long id;
+    @Column(name = "name", nullable = false)
     private String name;
+    @Column(name = "surname")
     private String surname;
+    @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
+    @Column(name = "email")
     private String email;
 
-    public Contact(long id, String name, String surname, String phoneNumber, String email) {
+    public Contact() {
+    }
+
+    public Contact(long id, String name, String phoneNumber) {
         this.id = id;
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+    }
+
+    public Contact(String name, String surname, String phoneNumber, String email) {
         this.name = name;
         this.surname = surname;
         this.phoneNumber = phoneNumber;
         this.email = email;
     }
 
-    public Contact(long id, String name, String phoneNumber, String email) {
-        this.id = id;
+    public Contact(String name, String phoneNumber, String email) {
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.email = email;
     }
 
-    public Contact(long id, String name, String phoneNumber) {
-        this.id = id;
+    public Contact(String name, String phoneNumber) {
         this.name = name;
         this.phoneNumber = phoneNumber;
     }

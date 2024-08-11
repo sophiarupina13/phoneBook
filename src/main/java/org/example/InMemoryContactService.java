@@ -11,12 +11,12 @@ import java.util.LinkedList;
 import java.util.List;
 
 @Service
-public class NamedJdbcContactService implements ContactsService {
+public class InMemoryContactService implements ContactsService {
 
-    private final NamedJdbcContactDao namedJdbcContactDao;
+    private final ContactDao contactDao;
 
-    public NamedJdbcContactService(NamedJdbcContactDao namedJdbcContactDao) {
-        this.namedJdbcContactDao = namedJdbcContactDao;
+    public InMemoryContactService(org.example.ContactDao contactDao) {
+        this.contactDao = contactDao;
     }
 
     @Override
@@ -39,7 +39,7 @@ public class NamedJdbcContactService implements ContactsService {
         for (String line : lines) {
             contactsToAdd.add(convertLineToContact(line));
         }
-        namedJdbcContactDao.addContacts(contactsToAdd);
+        contactDao.addContacts(contactsToAdd);
     }
 
     private Contact convertLineToContact(String line) {
@@ -47,7 +47,7 @@ public class NamedJdbcContactService implements ContactsService {
         String[] nameAndSurname = fields[0].split(" ");
         String name = nameAndSurname[0];
         String surname = nameAndSurname[1];
-        return new Contact(-1, name, surname, fields[1], fields[2]);
+        return new Contact(name, surname, fields[1], fields[2]);
     }
 
 }
