@@ -1,43 +1,45 @@
 package org.example;
 
-import org.example.config.ContactsConfig;
-import org.hibernate.SessionFactory;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 
 import java.io.File;
 import java.util.List;
 
+@SpringBootApplication
 public class ContactsMain {
     public static void main(String[] args) {
 
-        var applicationContext = new AnnotationConfigApplicationContext(ContactsConfig.class);
+        SpringApplication.run(ContactsMain.class, args);
 
-        var sessionFactory = applicationContext.getBean(SessionFactory.class);
-        var contactDao = applicationContext.getBean(ContactDao.class);
-        var contactService = applicationContext.getBean(ContactsService.class);
+    }
 
-        try (var session = sessionFactory.openSession()) {
+    @Bean
+    public CommandLineRunner demo(ContactRepository contactRepository, ContactsService contactsService) {
+        return args -> {
+            contactRepository.deleteAllInBatch();
 
-            var newContact1Id = contactDao.saveContact(new Contact("Marina", "Syvcheva", "+79123", "marinasyvh@mail.ru"));
-            var newContact2Id = contactDao.saveContact(new Contact("Psychologist", "+79234", "nastasya-nerud@mail.ru"));
-            var newContact3Id = contactDao.saveContact(new Contact("Honey", "+79732948"));
+            var newContact1 = contactRepository.save(new Contact("Marina", "Syvcheva", "+79123", "marinasyvh@mail.ru"));
+            var newContact2 = contactRepository.save(new Contact("Psychologist", "+79234", "nastasya-nerud@mail.ru"));
+            var newContact3 = contactRepository.save(new Contact("Honey", "+79732948"));
 
-            System.out.println(contactDao.getContact(newContact1Id));
-            System.out.println(contactDao.getContact(newContact2Id));
-            System.out.println(contactDao.getContact(newContact3Id));
+            System.out.println(contactRepository.findById(newContact1.getId()));
+            System.out.println(contactRepository.findById(newContact2.getId()));
+            System.out.println(contactRepository.findById(newContact3.getId()));
 
-            contactDao.updateContactPhoneNumber(newContact1Id, "+79123783490");
-            contactDao.updateContactEmail(newContact3Id, "alexeev@mail.ru");
-            contactDao.updateContact(new Contact(newContact2Id, "Anastasia psychologist", "+79234"));
-            contactDao.deleteContact(newContact3Id);
+            contactRepository.updateEmail(newContact3.getId(), "alexeev@mail.ru");
+            contactRepository.updatePhone(newContact1.getId(), "+79123783490");
+            contactRepository.deleteById(newContact3.getId());
 
             File path = new File("./src/main/resources/contactsToAdd.csv");
-            contactService.addContacts(path);
+            contactsService.addContacts(path);
 
-            List<Contact> contacts = contactDao.getAllContacts();
+            List<Contact> contacts = contactRepository.findAll();
 
             System.out.println(contacts);
-        }
 
+        };
     }
 }

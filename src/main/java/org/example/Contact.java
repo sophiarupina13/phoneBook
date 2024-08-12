@@ -1,6 +1,6 @@
 package org.example;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.Objects;
 
 @Entity
@@ -21,12 +21,6 @@ public class Contact {
     private String email;
 
     public Contact() {
-    }
-
-    public Contact(long id, String name, String phoneNumber) {
-        this.id = id;
-        this.name = name;
-        this.phoneNumber = phoneNumber;
     }
 
     public Contact(String name, String surname, String phoneNumber, String email) {

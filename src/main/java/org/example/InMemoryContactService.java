@@ -13,10 +13,10 @@ import java.util.List;
 @Service
 public class InMemoryContactService implements ContactsService {
 
-    private final ContactDao contactDao;
+    private final ContactRepository contactRepository;
 
-    public InMemoryContactService(org.example.ContactDao contactDao) {
-        this.contactDao = contactDao;
+    public InMemoryContactService(ContactRepository contactRepository) {
+        this.contactRepository = contactRepository;
     }
 
     @Override
@@ -39,7 +39,7 @@ public class InMemoryContactService implements ContactsService {
         for (String line : lines) {
             contactsToAdd.add(convertLineToContact(line));
         }
-        contactDao.addContacts(contactsToAdd);
+        contactRepository.batchSave(contactsToAdd);
     }
 
     private Contact convertLineToContact(String line) {
